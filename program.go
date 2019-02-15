@@ -93,7 +93,7 @@ func (program *Program) InternalRun() {
 		Output:  networkEventEnricher.Input,
 	}
 
-	// sysProcessManager.Run()
+	sysProcessManager.Run()
 	netStat.Run()
 	networkMonitor.Run()
 	networkEventEnricher.Run()

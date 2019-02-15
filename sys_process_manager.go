@@ -21,10 +21,10 @@ func (manager *SysProcessManager) Init() {
 
 func (manager *SysProcessManager) Run() {
 
-	ticker := time.NewTicker(5 * time.Second)
 	go func() {
-		for range ticker.C {
+		for {
 			manager._syncProcessInfoOnPids()
+			time.Sleep(10 * time.Second)
 		}
 	}()
 }
@@ -83,14 +83,14 @@ func (manager *SysProcessManager) FindProcessInfoByPid(pid int32) *ProcessInfo {
 	if pid > 0 {
 		if processInfo, ok := manager._pidToProcessInfoMap[pid]; ok {
 
-			if(len(processInfo.CommandLine) < 1){
+			if len(processInfo.CommandLine) < 1 {
 				process, _ := process.NewProcess(pid)
-				if(process != nil) {
+				if process != nil {
 					cmdLine, _ := process.Cmdline()
 					processInfo.CommandLine = cmdLine
 				}
 
-				if(len(processInfo.CommandLine) < 1){
+				if len(processInfo.CommandLine) < 1 {
 					processInfo.CommandLine = "-"
 				}
 			}

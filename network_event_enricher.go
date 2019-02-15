@@ -242,7 +242,7 @@ func (enricher *NetworkEventEnricher) _isNetworkEventProcessCompleted(event *Pro
 		return false
 	}
 
-	if event.ProcessId > -1 && event.Success == true {
+	if event.ProcessId > -1 && event.Success == true && event.ProcessInfo != nil {
 		return true
 	}
 
