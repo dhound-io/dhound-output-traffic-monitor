@@ -28,8 +28,9 @@ type NetworkEvent struct {
 }
 
 type DnsAnswer struct {
-	DomainName  string
-	IpAddresses *[]string
+	EventTimeUtcNumber int64
+	DomainName         string
+	IpAddresses        *[]string
 }
 
 type NetworkConnectionData struct {
@@ -280,6 +281,8 @@ func (monitor *NetworkMonitor) _monitorInterfaceTraffic(dev *NetInterfaceInfo) {
 						var ips []string
 						dnsName := dnsQuestion.Name
 
+						// debugJson(dns)
+
 						for _, dnsAnswer := range dns.Answers {
 							if dnsAnswer.Type == layers.DNSTypeA || dnsAnswer.Type == layers.DNSTypeAAAA {
 
@@ -296,8 +299,9 @@ func (monitor *NetworkMonitor) _monitorInterfaceTraffic(dev *NetInterfaceInfo) {
 							monitor.Output <- &NetworkEvent{
 								Type: DnsResponseReceived,
 								Dns: &DnsAnswer{
-									DomainName:  fmt.Sprintf("%s", dnsName),
-									IpAddresses: &ips,
+									DomainName:         fmt.Sprintf("%s", dnsName),
+									IpAddresses:        &ips,
+									EventTimeUtcNumber: time.Now().UTC().Unix(),
 								},
 							}
 						}

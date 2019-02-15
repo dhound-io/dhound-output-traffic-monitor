@@ -93,12 +93,11 @@ func (program *Program) InternalRun() {
 		Output:  networkEventEnricher.Input,
 	}
 
-	sysProcessManager.Run()
+	// sysProcessManager.Run()
 	netStat.Run()
 	networkMonitor.Run()
-	go networkEventEnricher.Run()
+	networkEventEnricher.Run()
 	output.Run()
-
 }
 
 func (program *Program) Start() error {
