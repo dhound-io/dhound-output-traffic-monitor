@@ -205,15 +205,15 @@ func (enricher *NetworkEventEnricher) _sync() {
 				}
 
 				if event.ProcessId > -1 {
-					output += fmt.Sprintf(" pid: %d", event.ProcessId)
+					output += fmt.Sprintf(" pid:%d", event.ProcessId)
 				}
 
 				if event.ProcessInfo != nil {
-					output += fmt.Sprintf(" process: %s commandline: %s", event.ProcessInfo.Name, event.ProcessInfo.CommandLine)
+					output += fmt.Sprintf(" process:\"%s\" commandline:\"%s\"", event.ProcessInfo.Name, event.ProcessInfo.CommandLine)
 				}
 
 				if len(event.Domains) > 0 {
-					output += fmt.Sprintf(" domains: %s", strings.Join(event.Domains, ","))
+					output += fmt.Sprintf(" domains:%s", strings.Join(event.Domains, ","))
 				}
 
 				line := &OutputLine{EventTimeUtcNumber: event.EventTimeUtcNumber, Line: output}
