@@ -46,7 +46,6 @@ type NetworkConnectionData struct {
 type NetworkMonitor struct {
 	Options           *Options
 	Output            chan *NetworkEvent
-	_ipToServicesMap  map[string][]string
 	SysProcessManager *SysProcessManager
 	_firstRun         bool
 }

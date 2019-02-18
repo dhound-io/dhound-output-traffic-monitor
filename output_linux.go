@@ -2,15 +2,17 @@
 
 package main
 
-func (output *Output) _processInput(lines []string) {
+func (output *Output) _processInput(lines []OutputLine) {
 	// debug("Output started %d", len(lines))
 	if lines != nil && len(lines) > 0 {
 		if output.Options.Out == "syslog" {
-			logwriter, e := syslog.New(syslog.LOG_NOTICE, "Dhound Output Traffic Monitor")
+			logwriter, e := syslog.New(syslog.LOG_NOTICE, "OUT-TRAFFIC")
 			if e == nil {
 				log.SetOutput(logwriter)
 			}
-		} else {
+		} 
+		
+		else {
 			log.SetOutput(&lumberjack.Logger{
 				Filename:   output.Options.Out,
 				MaxSize:    100, // megabytes

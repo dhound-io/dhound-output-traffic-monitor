@@ -1,15 +1,10 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
-	"os"
-	"path/filepath"
 	"sync"
 
 	svc "github.com/judwhite/go-svc/svc"
-	lumberjack "gopkg.in/natefinch/lumberjack.v2"
 )
 
 import _ "net/http/pprof"
@@ -22,33 +17,6 @@ type Program struct {
 
 func (program *Program) Init(env svc.Environment) error {
 
-	options := program.Options
-
-	// configure logging
-	log.SetFlags(log.Ldate | log.Ltime | log.Lmicroseconds)
-
-	if len(options.Out) > 0 && options.Out != "syslog" && options.Out != "console" {
-		fmt.Println("See output in  " + options.Out)
-
-		logDir := filepath.Dir(options.Out)
-		var err error
-		if _, err = os.Stat(logDir); os.IsNotExist(err) {
-			err = os.MkdirAll(logDir, 0765)
-		}
-
-		if err == nil {
-			log.SetOutput(&lumberjack.Logger{
-				Filename:   options.Out,
-				MaxSize:    50, // megabytes
-				MaxBackups: 3,
-				MaxAge:     28, //days
-			})
-		} else {
-			emitLine(logLevel.important, "Failed to create dir '%s' for log file. Error: %s", logDir, err)
-		}
-
-	}
-
 	return nil
 }
 
@@ -56,7 +24,7 @@ func (program *Program) InternalRun() {
 
 	options := program.Options
 
-	emitLine(logLevel.important, "Dhound output traffic monitor %s started. Options: out='%s' eth='%s' verbose='%t'", Version, options.Out, options.NetworkInterface, options.Verbose)
+	emitLine(logLevel.important, "Dhound output traffic monitor %s started. Options: log-file='%s' eth='%s' verbose='%t'", Version, options.LogFile, options.NetworkInterface, options.Verbose)
 
 	if len(options.Pprof) > 0 {
 		go func() {
@@ -75,7 +43,7 @@ func (program *Program) InternalRun() {
 	sysProcessManager.Init()
 
 	output := &Output{
-		Input:   make(chan []string),
+		Input:   make(chan []*OutputLine),
 		Options: options,
 	}
 	output.Init()
