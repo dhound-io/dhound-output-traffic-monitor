@@ -2,11 +2,9 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	"time"
-	/*
-		"strings"
-
-	*/)
+)
 
 type NetworkProtocol int
 
@@ -212,6 +210,10 @@ func (enricher *NetworkEventEnricher) _sync() {
 
 				if event.ProcessInfo != nil {
 					output += fmt.Sprintf(" process: %s commandline: %s", event.ProcessInfo.Name, event.ProcessInfo.CommandLine)
+				}
+
+				if len(event.Domains) > 0 {
+					output += fmt.Sprintf(" domains: %s", strings.Join(event.Domains, ","))
 				}
 
 				line := &OutputLine{EventTimeUtcNumber: event.EventTimeUtcNumber, Line: output}
