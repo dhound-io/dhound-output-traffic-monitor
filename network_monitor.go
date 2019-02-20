@@ -5,7 +5,6 @@ import (
 	"regexp"
 	"strings"
 	"time"
-
 	gopacket "github.com/google/gopacket"
 	layers "github.com/google/gopacket/layers"
 	pcap "github.com/google/gopacket/pcap"

@@ -5,19 +5,21 @@ package main
 import (
 	"log"
 	"log/syslog"
+	lumberjack "gopkg.in/natefinch/lumberjack.v2"
 )
 
-func (output *Output) _processInput(lines []OutputLine) {
+func (output *Output) _processInput(lines []*OutputLine) {
 	// debug("Output started %d", len(lines))
 	if lines != nil && len(lines) > 0 {
 		if output.Options.LogFile == "syslog" {
 			logwriter, e := syslog.New(syslog.LOG_NOTICE, "OUT-TRAFFIC")
 			if e == nil {
+				//logwriter.Info()
 				log.SetOutput(logwriter)
 			}
 		} else {
 			log.SetOutput(&lumberjack.Logger{
-				Filename:   output.Options.Out,
+				Filename:   output.Options.LogFile,
 				MaxSize:    100, // megabytes
 				MaxBackups: 3,
 				MaxAge:     28, // days
