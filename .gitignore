@@ -15,3 +15,7 @@ _ignore.go
 *.out
 
 read_me\.agent\.txt
+
+*.deb
+
+\.idea/

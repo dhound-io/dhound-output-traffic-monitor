@@ -1,0 +1,10 @@
+version: '3'
+services:
+    ubuntu:
+        container_name: ubuntu
+        build:
+            context: ./docker/ubuntu
+            dockerfile: Dockerfile
+        restart: always
+        volumes:
+          - "../:/home/src"
