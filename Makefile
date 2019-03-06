@@ -17,22 +17,23 @@ clean:
 	#-rm $(PROJECT)
 	-rm -rf build
 	-rm -rf publish/empty
+	-rm -rf publish/packages
 
 .PHONY: buildempty
 buildempty:
 	-mkdir publish/empty
+	-mkdir publish/packages
 
 
 .PHONY: rpm deb
+deb: BEFORE_INSTALL=publish/pkg/ubuntu/before-install.sh
 deb: AFTER_INSTALL=publish/pkg/ubuntu/after-install.sh
-rpm: AFTER_INSTALL=publish/pkg/centos/after-install.sh
+deb: BEFORE_REMOVE=publish/pkg/ubuntu/before-remove.sh
 
+rpm: AFTER_INSTALL=publish/pkg/centos/after-install.sh
 rpm: BEFORE_INSTALL=publish/pkg/centos/before-install.sh
 rpm: BEFORE_REMOVE=publish/pkg/centos/before-remove.sh
 
-deb: AFTER_INSTALL=publish/pkg/ubuntu/after-install.sh
-deb: BEFORE_INSTALL=publish/pkg/ubuntu/before-install.sh
-deb: BEFORE_REMOVE=publish/pkg/ubuntu/before-remove.sh
 rpm deb: PREFIX=/opt/dhound-output-traffic-monitor
 rpm deb: clean compile buildempty
 	fpm  -f -s dir -t $@ -n $(PACKAGE_NAME) -v $(VERSION) \
