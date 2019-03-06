@@ -7,6 +7,6 @@ fi
 
 # create dhound-agent user
 if ! getent passwd dhound-agent >/dev/null; then
-  useradd -M -r -g dhound-agent -d /var/lib/dhound-agent \
+  useradd -M -r -g dhound-agent -d /var/lib/dhound-output-traffic-monitor \
     -s /usr/sbin/nologin -c "dhound-agent Service User" dhound-agent
 fi
