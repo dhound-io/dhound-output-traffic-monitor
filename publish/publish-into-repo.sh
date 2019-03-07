@@ -1,6 +1,10 @@
 #!/bin/sh
 
 REPOFOLDER=/var/dhound.io/repository
+#REPOFOLDER=/home/local-user/pseudo-repo
+
+# open packages directory
+cd packages/
 
 # publish debian packages
 find -name \*.deb -exec reprepro --ignore=undefinedtarget -Vb $REPOFOLDER/deb includedeb dhound-output-traffic-monitor {} \;
@@ -10,4 +14,3 @@ cp *.rpm $REPOFOLDER/rpm/
 createrepo --outputdir=$REPOFOLDER/rpm/ . --update
 
 sudo chmod -R ugo+rX $REPOFOLDER
-
