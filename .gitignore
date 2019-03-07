@@ -19,3 +19,7 @@ read_me\.agent\.txt
 *.deb
 
 \.idea/
+
+publish/docker/
+
+*.rpm
