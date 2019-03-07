@@ -1,4 +1,4 @@
-VERSION=1.1.1
+VERSION=1.1.2
 PACKAGE_NAME=dhound-output-traffic-monitor
 
 .PHONY: default
@@ -17,12 +17,12 @@ clean:
 	#-rm $(PROJECT)
 	-rm -rf build
 	-rm -rf publish/empty
-	-rm -rf publish/packages
+	#-rm -rf publish/packages
 
 .PHONY: buildempty
 buildempty:
 	-mkdir publish/empty
-	-mkdir publish/packages
+	#-mkdir publish/packages
 
 
 .PHONY: rpm deb
