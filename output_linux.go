@@ -12,7 +12,7 @@ func (output *Output) _processInput(lines []*OutputLine) {
 	// debug("Output started %d", len(lines))
 	if lines != nil && len(lines) > 0 {
 		if output.Options.LogFile == "syslog" {
-			logwriter, e := syslog.New(syslog.LOG_NOTICE, "OUT-TRAFFIC")
+			logwriter, e := syslog.New(syslog.LOG_NOTICE, "dhound-output-traffic-monitor ")
 			if e == nil {
 				//logwriter.Info()
 				log.SetOutput(logwriter)
@@ -26,7 +26,7 @@ func (output *Output) _processInput(lines []*OutputLine) {
 			})
 		}
 		for _, line := range lines {
-			log.Print(line)
+			log.Print(line.Line)
 		}
 	}
 	// debug("Output finished %d", len(lines))

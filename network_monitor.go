@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"regexp"
-	"strings"
-	"time"
 	gopacket "github.com/google/gopacket"
 	layers "github.com/google/gopacket/layers"
 	pcap "github.com/google/gopacket/pcap"
+	"regexp"
+	"strings"
+	"time"
 )
 
 type NetworkEventType int
@@ -200,7 +200,6 @@ func (monitor *NetworkMonitor) _monitorInterfaceTraffic(dev *NetInterfaceInfo) {
 				srcIp = ip6.SrcIP.String()
 				dstIp = ip6.DstIP.String()
 			case layers.LayerTypeTCP:
-
 				// server initiate external connection to Internet
 				if tcp.SYN && !tcp.ACK {
 					if localNetworkRegex.MatchString(dstIp) == false && Contains(dev.Addresses, srcIp) {
@@ -237,25 +236,24 @@ func (monitor *NetworkMonitor) _monitorInterfaceTraffic(dev *NetInterfaceInfo) {
 				}
 
 			case layers.LayerTypeUDP:
-
-				// emitLine(logLevel.verbose, "UDP: %s:%d->%s:%d, checksum: %d, len: %d.", srcIp, udp.SrcPort, dstIp, udp.DstPort, udp.Checksum, udp.Length)
+			//	emitLine(logLevel.verbose, "UDP: %s:%d->%s:%d, checksum: %d, len: %d.", srcIp, udp.SrcPort, dstIp, udp.DstPort, udp.Checksum, udp.Length)
 
 				// host sent UDP request to Internet
 				if localNetworkRegex.MatchString(dstIp) == false && Contains(dev.Addresses, srcIp) {
-					// emitLine(logLevel.verbose, "UDP INIT: %s:%d->%s:%d, checksum: %d, len: %d.", srcIp, udp.SrcPort, dstIp, udp.DstPort, udp.Checksum, udp.Length)
+						// emitLine(logLevel.verbose, "UDP INIT: %s:%d->%s:%d, checksum: %d, len: %d.", srcIp, udp.SrcPort, dstIp, udp.DstPort, udp.Checksum, udp.Length)
 
-					monitor.Output <- &NetworkEvent{
-						Type: UdpSendByHost,
-						Connection: &NetworkConnectionData{
-							LocalIpAddress:     srcIp,
-							RemoteIpAddress:    dstIp,
-							Size:               udp.Length,
-							LocalPort:          uint32(udp.SrcPort),
-							RemotePort:         uint32(udp.DstPort),
-							EventTimeUtcNumber: time.Now().UTC().Unix(),
-						},
+						monitor.Output <- &NetworkEvent{
+							Type: UdpSendByHost,
+							Connection: &NetworkConnectionData{
+								LocalIpAddress:     srcIp,
+								RemoteIpAddress:    dstIp,
+								Size:               udp.Length,
+								LocalPort:          uint32(udp.SrcPort),
+								RemotePort:         uint32(udp.DstPort),
+								EventTimeUtcNumber: time.Now().UTC().Unix(),
+							},
+						}
 					}
-				}
 
 				// Internet source sent an UDP request back
 				if localNetworkRegex.MatchString(srcIp) == false && Contains(dev.Addresses, dstIp) {
@@ -305,6 +303,8 @@ func (monitor *NetworkMonitor) _monitorInterfaceTraffic(dev *NetInterfaceInfo) {
 						}
 					}
 				}
+			default:
+				// debugJson(typ)
 			}
 		}
 	}
