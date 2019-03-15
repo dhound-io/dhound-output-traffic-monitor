@@ -141,22 +141,21 @@ EOF"
         fi
     fi
 
-    echo "Restarting dhound-agent..."
-    /etc/init.d/dhound-agent restart
+    echo "Restarting dhound-output-traffic-monitor..."
+    /etc/init.d/dhound-output-traffic-monitor restart
 
     if [ $? -gt 0 ]; then
-      echo "DHound-agent installation failed."
+      echo "dhound-output-traffic-monitor installation failed."
       exit 1
     fi
 
     echo ""
     if [ $UPDATEAGENT -eq 1 ]; then
-       echo "dhound-agent has been updated successfully!"
+       echo "dhound-output-traffic-monitor has been updated successfully!"
     else
        echo "dhound-agent has been installed successfully!"
     fi
-    echo "dhound-agent output information can be found in the file: /var/log/dhound-agent/dhound.log"
-
+    echo "dhound-agent output information can be found in the file: /var/log/dhound/dhound.log"
 }
 
 # 1st parameter - url, 2nd - error
@@ -174,7 +173,6 @@ function check_url_status()
 }
 
 function pre_install_sanity() {
-
     which curl > /dev/null
     if [ $? -gt 0 ]; then
                 echo "Installing curl ..."
