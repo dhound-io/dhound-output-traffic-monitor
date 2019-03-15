@@ -1,12 +1,12 @@
 #!/bin/sh
 
-# create dhound-agent group
-if ! getent group dhound-agent >/dev/null; then
-  groupadd -r dhound-agent
+# create dhound group
+if ! getent group dhound >/dev/null; then
+  groupadd -r dhound
 fi
 
-# create dhound-agent user
-if ! getent passwd dhound-agent >/dev/null; then
-  useradd -M -r -g dhound-agent -d /var/lib/dhound-output-traffic-monitor \
-    -s /usr/sbin/nologin -c "dhound-agent Service User" dhound-agent
+# create dhound user
+if ! getent passwd dhound >/dev/null; then
+  useradd -M -r -g dhound -d /var/lib/dhound-output-traffic-monitor \
+    -s /usr/sbin/nologin -c "dhound.io Service User" dhound
 fi
