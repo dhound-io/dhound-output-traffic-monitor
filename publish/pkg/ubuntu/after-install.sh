@@ -7,4 +7,3 @@ chown dhound-agent:dhound-agent /var/lib/dhound-output-traffic-monitor
 update-rc.d dhound-agent defaults
 
 echo "Logs for dhound-output-traffic-monitor will be in /var/log/dhound-agent/"
-cd d
