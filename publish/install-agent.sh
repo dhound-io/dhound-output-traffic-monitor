@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 set -o pipefail
 
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+LGRAY='\033[0;37m'
+DGRAY='\033[0;30m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
 ### Based on scripts developed by boundary
 ### Copyright 2011-2013, Boundary
 ### Copyright 2016-2017, DHound
@@ -330,7 +337,7 @@ while getopts ":a:s:h:u" opt; do
     esac
 done
 
-echo "===DHound Agent Installer==="
+echo -e "${GREEN}===DHound Output Traffic Monitor===${NC}"
 which /opt/dhound-agent/bin/dhound-agent > /dev/null
 if [ $? -eq 0 ]; then
     DHOUND_INSTALLED=1
@@ -407,7 +414,7 @@ fi
 
 
 if [ $UPDATEAGENT -eq 0 ]; then
-    echo "Supplied paramenters: ClientAccessKey=$ACCESSKEY ServerKey=$SERVERKEY"
+    echo -e "Supplied paramenters: ${BLUE}ClientAccessKey${NC}=$ACCESSKEY  ${BLUE}ServerKey${NC}=$SERVERKEY"
 fi
 
 echo "OS: $DISTRO $VERSION..."
