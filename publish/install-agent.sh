@@ -85,8 +85,9 @@ function do_install() {
 
     if [ "$DISTRO" = "Ubuntu" ] || [ $DISTRO = "Debian" ]; then
 
-        echo "Adding repository $DEBREPOSITORY"
-        sh -c "echo \"deb $DEBREPOSITORY dhound.io main\" | sudo tee /etc/apt/sources.list.d/dhound.list"
+        echo -e "${GREEN}Adding repository $DEBREPOSITORY ${NC}"
+        #sh -c "echo \"deb $DEBREPOSITORY dhound.io main\" | sudo tee /etc/apt/sources.list.d/dhound.list"
+         echo -e "deb $DEBREPOSITORY dhound-agent main\ndeb $DEBREPOSITORY dhound-output-traffic-monitor main" | sudo tee /etc/apt/sources.list.d/dhound.list
 
         $CURL -Ls $SIGNKEY | sudo apt-key add - > /dev/null
         if [ $? -gt 0 ]; then
