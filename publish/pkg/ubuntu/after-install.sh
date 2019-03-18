@@ -15,9 +15,9 @@ update-rc.d dhound-output-traffic-monitor defaults
 
 echo "Logs for dhound-output-traffic-monitor will be in ${GREEN}/var/log/dhound/${NC}"
 echo "${BLUE}How to${NC}"
-echo "${LGRAY}sudo service dhound-output-traffic-monitor status${NC} - application status"
-echo "${GREEN}sudo service dhound-output-traffic-monitor start${NC} - start application"
-echo "${RED}sudo service dhound-output-traffic-monitor status${NC} - stop application"
+echo "sudo service dhound-output-traffic-monitor status - application ${LGRAY}status${NC}"
+echo "sudo service dhound-output-traffic-monitor start${NC} - ${GREEN}start${NC} application${NC}"
+echo "sudo service dhound-output-traffic-monitor status${NC} - ${RED}stop${NC} application"
 
 service dhound-output-traffic-monitor start
 
