@@ -78,11 +78,6 @@ function do_install() {
 
     check_url_status "$SIGNKEY"
 
-    if [ $UPDATEAGENT -eq 0 ]; then
-        CONFIG_URL="$APIHOST/$ACCESSKEY/$SERVERKEY/config.yml"
-        check_url_status "$CONFIG_URL" "Open url $CONFIG_URL in browser to get error details"
-    fi
-
     if [ "$DISTRO" = "Ubuntu" ] || [ $DISTRO = "Debian" ]; then
 
         echo -e "${GREEN}Adding repository $DEBREPOSITORY ${NC}"
@@ -95,20 +90,13 @@ function do_install() {
             exit 1
         fi
 
-        echo "Updating apt repository cache..."
+        echo -e "${GREEN}Updating apt repository cache...${NC}"
         $APT_CMD update -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/dhound.list -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0" 
 
         if [ $UPDATEAGENT -eq 0 ]; then
-            echo "Installing dhound-output-traffic-monitor..."
-            $APT_CMD install dhound-output-traffic-monitor
-
-            echo "Installation finished"
-
-            $CURL -s "$CONFIG_URL" | tee "/etc/dhound-agent/config.yml" > /dev/null
-            if [ $? -gt 0 ]; then
-                echo "Failed writing dhound-agent config file /etc/dhound-agent/config.yml."
-                exit 1
-            fi
+            echo -e "${GREEN}Installing dhound-output-traffic-monitor...${NC}"
+            $APT_CMD install dhound-output-traffic-monitor > /dev/null
+            echo -e "${GREEN}Installation finished${NC}"
         else
             $APT_CMD install --only-upgrade dhound-agent
         fi
@@ -140,7 +128,7 @@ EOF"
             $YUM_CMD install dhound-agent
             $CURL -s "$CONFIG_URL" | tee "/etc/dhound-agent/config.yml" > /dev/null
             if [ $? -gt 0 ]; then
-                echo "Failed writing dhound-agent config file /etc/dhound-agent/config.yml."
+                echo -e "${RED}Failed writing dhound-agent config file /etc/dhound-agent/config.yml.${NC}"
                 exit 1
             fi
 
@@ -161,9 +149,9 @@ EOF"
     if [ $UPDATEAGENT -eq 1 ]; then
        echo "dhound-output-traffic-monitor has been updated successfully!"
     else
-       echo "dhound-agent has been installed successfully!"
+       echo "dhound-output-traffic-monitor has been installed successfully!"
     fi
-    echo "dhound-agent output information can be found in the file: /var/log/dhound/dhound.log"
+    echo -e "${GREEN}dhound-output-traffic-monitor output information can be found in the file: /var/log/dhound/dhound.log${NC}"
 }
 
 # 1st parameter - url, 2nd - error
@@ -173,9 +161,9 @@ function check_url_status()
     status=$(curl --write-out %{http_code} -silent --output /dev/null $url)
     error="$2"
     if test $status -ne 200; then
-        echo "Failed loading url: $url (status: $status)"
+        echo -e "${RED}Failed loading url: $url (status: $status)${NC}"
         echo "$error"
-        echo "Installation failed"
+        echo -e "${RED}Installation failed${NC}"
         exit 1
     fi
 }
@@ -311,19 +299,13 @@ else
     fi
 fi
 
-while getopts ":a:s:h:u" opt; do
+while getopts ":h:u" opt; do
     case $opt in
     u)
         UPDATEAGENT=1
         ;;
         h)
                 print_help
-                ;;
-        a)
-                ACCESSKEY="$OPTARG"  >&2
-                ;;
-        s)
-                SERVERKEY="$OPTARG" >&2
                 ;;
         [?])
                 exit 1
@@ -350,25 +332,12 @@ if [ $DHOUND_INSTALLED -eq 1 ]; then
     if  [ $UPDATEAGENT -eq 0 ]; then
             echo "Dhound-agent already installed into the system. Use -u option for the script to upgrade dhound-agent to the latest version."
         print_help
-             exit 1
+        exit 1
     fi
 
     echo "DHound-agent already installed. The script will upgrade dhound-agent to the latest version."
     UPDATEAGENT=1
 else
-    if [[ -z "$ACCESSKEY" ]]; then
-        echo "dhound-agent not found. new installation required."
-        echo "accesskey argument is missing."
-        echo ""
-        print_help
-    fi
-
-    if [[ -z "$SERVERKEY" ]]; then
-        echo "dhound-agent not found. new installation required."
-        echo "serverkey argument is missing."
-        echo ""
-        print_help
-    fi
     UPDATEAGENT=0
 fi
 
@@ -413,12 +382,9 @@ if [ $SUPPORTED_ARCH -eq 0 ]; then
     exit 1
 fi
 
-
-if [ $UPDATEAGENT -eq 0 ]; then
-    echo -e "Supplied paramenters: ${BLUE}ClientAccessKey${NC}=$ACCESSKEY  ${BLUE}ServerKey${NC}=$SERVERKEY"
-fi
-
-echo "OS: $DISTRO $VERSION..."
+# ${BLUE}
+# ${NC}
+echo -e "${GREEN}Supplied paramenters:${NC} \n${BLUE}OS:${NC} $DISTRO $VERSION..."
 
 DISTROMAJORVERSION=$(echo "$VERSION" | grep -oP "[0-9]+" | head -1)
 
