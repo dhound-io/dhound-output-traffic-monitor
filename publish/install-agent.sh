@@ -64,8 +64,6 @@ function print_supported_platforms() {
 
 function print_help() {
     echo "  Arguments:"
-    echo "      -a: dhound access key"
-    echo "      -s: dhound server key"
     echo "      -u: update agent to latest version"
     echo "      -h: help"
     echo "  Examples:"
@@ -77,7 +75,7 @@ function print_help() {
 function do_install() {
 
     check_url_status "$SIGNKEY"
-
+echo
     if [ "$DISTRO" = "Ubuntu" ] || [ $DISTRO = "Debian" ]; then
 
         echo -e "${GREEN}Adding repository $DEBREPOSITORY ${NC}"
@@ -151,7 +149,7 @@ EOF"
     else
        echo "dhound-output-traffic-monitor has been installed successfully!"
     fi
-    echo -e "${GREEN}dhound-output-traffic-monitor output information can be found in the file: /var/log/dhound/dhound.log${NC}"
+    echo -e "${GREEN}dhound-output-traffic-monitor output information can be found in the file: dhound-output-traffic-monitor.log${NC}"
 }
 
 # 1st parameter - url, 2nd - error
@@ -171,7 +169,7 @@ function check_url_status()
 function pre_install_sanity() {
     which curl > /dev/null
     if [ $? -gt 0 ]; then
-                echo "Installing curl ..."
+                echo -e "${GREEN}Installing curl ...${NC}"
 
                 if [ $DISTRO = "Ubuntu" ] || [ $DISTRO = "Debian" ]; then
                         echo "Updating apt repository cache..."
@@ -314,14 +312,14 @@ while getopts ":h:u" opt; do
                 exit 1
                 ;;
         :)
-            echo "Option -$OPTARG requires an argument." >&2
+            echo -e "${RED}Option -$OPTARG requires an argument.${NC}" >&2
             exit 1
             ;;
     esac
 done
 
 echo -e "${GREEN}===DHound Output Traffic Monitor===${NC}"
-which /opt/dhound-agent/bin/dhound-agent > /dev/null
+which /opt/dhound-output-traffic-monitor > /dev/null
 if [ $? -eq 0 ]; then
     DHOUND_INSTALLED=1
 else
@@ -330,12 +328,12 @@ fi
 
 if [ $DHOUND_INSTALLED -eq 1 ]; then
     if  [ $UPDATEAGENT -eq 0 ]; then
-            echo "Dhound-agent already installed into the system. Use -u option for the script to upgrade dhound-agent to the latest version."
+            echo -e "{$BLUE}Dhound Output Traffic Monitor already installed into the system. Use -u option for the script to upgrade dhound-agent to the latest version.${NC}"
         print_help
         exit 1
     fi
 
-    echo "DHound-agent already installed. The script will upgrade dhound-agent to the latest version."
+    echo -e "${GREEN}DHound-agent already installed. The script will upgrade dhound-agent to the latest version.${NC}"
     UPDATEAGENT=1
 else
     UPDATEAGENT=0
@@ -367,7 +365,7 @@ if [[ "$MACHINE" == arm* ]] ; then
                         echo "Detected $MACHINE running armhf"
                 fi
         else
-                echo "Cannot determine ARM ABI, please install the 'binutils' package"
+                echo -e "${RED}Cannot determine ARM ABI, please install the 'binutils' package${NC}"
         fi
 fi
 
@@ -377,8 +375,8 @@ if [ "$MACHINE" = "x86_64" ] || [ "$MACHINE" = "amd64" ]; then
 fi
 
 if [ $SUPPORTED_ARCH -eq 0 ]; then
-    echo "Unsupported architecture ($MACHINE) ..."
-    echo "This is an unsupported platform for the dhound."
+    echo -e "${RED}Unsupported architecture ($MACHINE) ...${NC}"
+    echo -e "${RED}This is an unsupported platform for the dhound.${NC}"
     exit 1
 fi
 
@@ -401,20 +399,19 @@ for d in ${PLATFORMS[*]} ; do
 done
 
 if [ $SUPPORTED_PLATFORM -eq 0 ]; then
-    echo "Your platform is not supported by this script at this time."
+    echo -e "${RED}Your platform is not supported by this script at this time.${NC}"
     print_supported_platforms
     exit 1
 fi
 
 # If this script is being run by root for some reason, don't use sudo.
 if [ "$(id -u)" != "0" ]; then
-    echo "This script must be executed as the 'root' user or with sudo"
-    echo "Please install sudo or run again as the 'root' user."
+    echo -e "${RED}This script must be executed as the 'root' user or with sudo${NC}"
+    echo -e "${RED}Please install sudo or run again as the 'root' user.${NC}"
     exit 1
 fi
 
 # At this point, we think we have a supported OS.
-pre_install_sanity $d $v
+pre_install_sanity $d
 
 do_install
-
