@@ -8,7 +8,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 chown -R dhound:dhound /opt/dhound-output-traffic-monitor
-chown dhound-agent /var/log/dhound
+chown dhound /var/log/dhound
 chown dhound:dhound /var/lib/dhound-output-traffic-monitor
 
 update-rc.d dhound-output-traffic-monitor defaults

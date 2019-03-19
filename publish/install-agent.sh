@@ -96,7 +96,7 @@ echo
             $APT_CMD install dhound-output-traffic-monitor > /dev/null
             echo -e "${GREEN}Installation finished${NC}"
         else
-            $APT_CMD install --only-upgrade dhound-agent
+            $APT_CMD install --only-upgrade dhound-output-traffic-monitor
         fi
 
     elif [ "$DISTRO" = "CentOS" ] || [ $DISTRO = "Amazon" ] || [ $DISTRO = "RHEL" ] || [ $DISTRO = "Oracle" ]; then
@@ -123,15 +123,10 @@ EOF"
             fi
 
             rpm --import "$GPG_KEY_LOCATION"
-            $YUM_CMD install dhound-agent
-            $CURL -s "$CONFIG_URL" | tee "/etc/dhound-agent/config.yml" > /dev/null
-            if [ $? -gt 0 ]; then
-                echo -e "${RED}Failed writing dhound-agent config file /etc/dhound-agent/config.yml.${NC}"
-                exit 1
-            fi
+            $YUM_CMD install dhound-output-traffic-monitor
 
         else
-            $YUM_CMD install dhound-agent
+            $YUM_CMD install dhound-output-traffic-monitor
         fi
     fi
 
@@ -328,12 +323,12 @@ fi
 
 if [ $DHOUND_INSTALLED -eq 1 ]; then
     if  [ $UPDATEAGENT -eq 0 ]; then
-            echo -e "{$BLUE}Dhound Output Traffic Monitor already installed into the system. Use -u option for the script to upgrade dhound-agent to the latest version.${NC}"
+            echo -e "{$BLUE}Dhound Output Traffic Monitor already installed into the system. Use -u option for the script to upgrade dhound-output-traffic-monitor to the latest version.${NC}"
         print_help
         exit 1
     fi
 
-    echo -e "${GREEN}DHound-agent already installed. The script will upgrade dhound-agent to the latest version.${NC}"
+    echo -e "${GREEN}DHound Outptu Traffic Monitor already installed. The script will upgrade dhound-output-traffic-monitor to the latest version.${NC}"
     UPDATEAGENT=1
 else
     UPDATEAGENT=0
