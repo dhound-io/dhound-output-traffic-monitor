@@ -16,8 +16,8 @@ export PATH
 name=dhound-output-traffic-monitor
 logdir=/var/log/dhound/
 program=/opt/dhound-output-traffic-monitor
-#args=-log-file\ $(logdir)dhound-output-traffic.log
-args=-log-file\ syslog
+args=-log-file\ ${logdir}dhound-output-traffic-monitor.log
+#args=-log-file\ syslog
 pidfile="/var/run/$name.pid"
 
 [ -r /etc/default/$name ] && . /etc/default/$name
@@ -39,7 +39,6 @@ start() {
   chmod 755 "$logdir"
 
   # Run the program!
-
   chroot --userspec "$user":"$group" "$chroot" sh -c "
     
     cd \"$chdir\"

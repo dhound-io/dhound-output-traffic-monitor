@@ -135,21 +135,21 @@ EOF"
         fi
     fi
 
-    echo "Restarting dhound-output-traffic-monitor..."
+    echo -e "${BLUE}Restarting dhound-output-traffic-monitor...${NC}"
     /etc/init.d/dhound-output-traffic-monitor restart
 
     if [ $? -gt 0 ]; then
-      echo "dhound-output-traffic-monitor installation failed."
+      echo -e "${RED}dhound-output-traffic-monitor installation failed.${NC}"
       exit 1
     fi
 
     echo ""
     if [ $UPDATEAGENT -eq 1 ]; then
-       echo "dhound-output-traffic-monitor has been updated successfully!"
+       echo -e "${GREEN}dhound-output-traffic-monitor has been updated successfully!${NC}"
     else
-       echo "dhound-output-traffic-monitor has been installed successfully!"
+       echo -e "${GREEN}dhound-output-traffic-monitor has been installed successfully!${NC}"
     fi
-    echo -e "${GREEN}dhound-output-traffic-monitor output information can be found in the file: dhound-output-traffic-monitor.log${NC}"
+    echo -e "${BLUE}dhound-output-traffic-monitor output information can be found in the file: /var/log/dhound/dhound-output-traffic-monitor.log${NC}"
 }
 
 # 1st parameter - url, 2nd - error
