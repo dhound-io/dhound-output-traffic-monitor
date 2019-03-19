@@ -25,7 +25,7 @@ pidfile="/var/run/$name.pid"
 
 trace() {
   logger -t "/etc/init.d/dhound-output-traffic-monitor" "$@"
-}11
+}
 
 emit() {
   trace "$@"
