@@ -33,11 +33,10 @@ emit() {
 }
 
 start() {
-
   # Ensure the log directory is setup correctly.
-  [ ! -d $(logdir) ] && mkdir "$(logdir)"
-  chown "$user":"$group" "$(logdir)"
-  chmod 755 "$(logdir)"
+  [ ! -d $logdir ] && mkdir "$logdir"
+  chown "$user":"$group" "$logdir"
+  chmod 755 "$logdir"
 
   # Run the program!
 
@@ -45,7 +44,7 @@ start() {
     
     cd \"$chdir\"
     exec \"$program\" $args
-  " >> $(logdir)dhound-output-traffic-monitor.log 2>> $(logdir)dhound-output-traffic-monitor.log &
+  " >> ${logdir}dhound-output-traffic-monitor.log 2>> ${logdir}dhound-output-traffic-monitor.log &
 
   # Generate the pidfile from here. If we instead made the forked process
   # generate it there will be a race condition between the pidfile writing
