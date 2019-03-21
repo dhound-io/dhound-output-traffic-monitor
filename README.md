@@ -10,7 +10,29 @@ All of this functionality is fully configurable.
 ## Install
 
 ## Running
+### Options
+```
+    -log-file
+```
+network events output: syslog, console, <path to a custom file>; default: console
 
+```
+    -eth
+```
+listen to a particular network interface; default: listen to all active network interfaces
+```
+    -verbose
+```
+log more detailed and debug information; default: false
+```
+    -version
+```
+dhound output traffic monitor version
+
+```
+    -pprof
+```
+for internal using) profiling option
 ### All commands
 
 ```
