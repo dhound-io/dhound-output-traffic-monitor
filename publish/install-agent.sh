@@ -48,7 +48,7 @@ SUPPORTED_PLATFORM=0
 UPDATEAGENT=0
 
 APT_CMD="apt-get -q -y"
-YUM_CMD="yum -d0 -e0 -y"
+YUM_CMD="yum -d0 -e0 -y --nogpgcheck"
 
 
 trap "exit" INT TERM EXIT
