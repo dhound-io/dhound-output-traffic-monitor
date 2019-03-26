@@ -7,9 +7,26 @@ Utility to show network traffic (both TCP and UDP v4 and v6) split by process an
 All of this functionality is fully configurable.
 
 ## Documentation
+These instructions will get you install and configure Dhound Output Traffic Monitor on your server.
+
 ## Install
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+To install login to the server using ssh and run the following command:
+```
+curl https://raw.githubusercontent.com/dhound-io/dhound-output-traffic-monitor/master/publish/install-agent.sh 2>/dev/null | sudo bash -s -- -u
+```
+After executing this command the installer will be downloaded and started.
+
 ## Running
+```
+service dhound-output-traffic-monitor start
+```
+```
+service dhound-output-traffic-monitor stop
+```
+```
+service dhound-output-traffic-monitor status
+```
+
 ### Options
 ```
     -log-file
@@ -27,47 +44,8 @@ log more detailed and debug information; default: false
 ```
     -version
 ```
-dhound output traffic monitor version
+Display dhound output traffic monitor version
 
 ```
     -pprof
 ```
-for internal using) profiling option
-### All commands
-
-```
-    -eth
-```
-listen to a particular network interface; default: listen to all active network interfaces
-```
-    -verbose
-```
-log more detailed and debug information; default: false
-```
-    -version
-```
-dhound output traffic monitor version
-
-```
-    -pprof
-```
-for internal using) profiling option
-
-### All commands
-
-```
-
-### Sample usage
-
-```
-example
-```
-
-### *sudo* requirements
-
-about sudo using
-
-## Export and analysis of data
-### Using Dhound Platform
-[dhound.io](https://dhound.io)
-### Using log files
