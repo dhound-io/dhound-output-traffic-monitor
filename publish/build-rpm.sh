@@ -23,7 +23,6 @@ cd publish/
 echo 'Sign rpm packages'
 for line in $(find . -iname '*.rpm'); do
    sign-rpm.sh ""  "$line"
-   ls -la
    echo $line
    rpm --checksig "$line"
 done

@@ -34,7 +34,7 @@ RHEL_VERSION_MIN="5"
 CloudLinux_VERSION_MIN="5"
 Oracle_VERSION_MIN="6"
 Fedora_VERSION_MIN="21"
-Amazon_VERSION_MIN="2012"
+Amazon_VERSION_MIN=""
 
 APIHOST="https://gate.dhound.io"
 DEBREPOSITORY="https://repository.dhound.io/deb"
@@ -131,7 +131,7 @@ EOF"
     fi
 
     echo -e "${BLUE}Restarting dhound-output-traffic-monitor...${NC}"
-    /etc/init.d/dhound-output-traffic-monitor restart
+    service dhound-output-traffic-monitor restart
 
     if [ $? -gt 0 ]; then
       echo -e "${RED}dhound-output-traffic-monitor installation failed.${NC}"
