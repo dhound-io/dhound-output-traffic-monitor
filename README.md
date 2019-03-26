@@ -17,12 +17,15 @@ curl https://raw.githubusercontent.com/dhound-io/dhound-output-traffic-monitor/m
 After executing this command the installer will be downloaded and started.
 
 ## Running
+Start Dhound Output Traffic Monitor service
 ```
 service dhound-output-traffic-monitor start
 ```
+Stop Dhound Output Traffic Monitor service
 ```
 service dhound-output-traffic-monitor stop
 ```
+Show service status
 ```
 service dhound-output-traffic-monitor status
 ```
