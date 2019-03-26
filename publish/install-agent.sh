@@ -115,6 +115,15 @@ enabled=1
 gpgcheck=1
 metadata_expire=300
 gpgkey=file://$GPG_KEY_LOCATION
+
+[repository.dhound.io]
+name=dhound-output-traffic-monitor
+baseurl=https://repository.dhound.io/rpm
+failovermethod=priority
+enabled=1
+gpgcheck=1
+metadata_expire=300
+gpgkey=file://$GPG_KEY_LOCATION
 EOF"
             $CURL -s "$SIGNKEY"  | tee "$GPG_KEY_LOCATION" > /dev/null
             if [ $? -gt 0 ]; then
