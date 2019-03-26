@@ -217,7 +217,7 @@ func (enricher *NetworkEventEnricher) _sync() {
 				}
 
 				if  event.EventTimeUtcNumber > 0 {
-					output += fmt.Sprintf(" timestamp: %d", event.EventTimeUtcNumber)
+					output += fmt.Sprintf(" timestamp:%d", event.EventTimeUtcNumber)
 				}
 
 				line := &OutputLine{EventTimeUtcNumber: event.EventTimeUtcNumber, Line: output}

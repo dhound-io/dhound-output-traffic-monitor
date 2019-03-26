@@ -337,7 +337,7 @@ if [ $DHOUND_INSTALLED -eq 1 ]; then
         exit 1
     fi
 
-    echo -e "${GREEN}DHound Outptu Traffic Monitor already installed. The script will upgrade dhound-output-traffic-monitor to the latest version.${NC}"
+    echo -e "${GREEN}DHound Output Traffic Monitor already installed. The script will upgrade dhound-output-traffic-monitor to the latest version.${NC}"
     UPDATEAGENT=1
 else
     UPDATEAGENT=0
