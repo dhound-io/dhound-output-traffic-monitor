@@ -9,6 +9,7 @@ type NetStatInfo struct {
 	Pid                int32
 	LocalIp            string
 	LocalPort          uint32
+	RemotePort 		   uint32
 	EventTimeUtcNumber int64
 }
 
@@ -87,6 +88,7 @@ func (manager *NetStatManager) SyncPortList() {
 					Pid:                connection.Pid,
 					LocalIp:            connection.Laddr.IP,
 					LocalPort:          connection.Laddr.Port,
+					RemotePort:         connection.Raddr.Port,
 					EventTimeUtcNumber: currentTimeNumber,
 				}
 
