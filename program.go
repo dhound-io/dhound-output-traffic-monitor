@@ -36,7 +36,9 @@ func (program *Program) InternalRun() {
 		}()
 	}
 
-	netStat := &NetStatManager{}
+	netStat := &NetStatManager{
+		Options: options,
+	}
 	netStat.Init()
 
 	sysProcessManager := &SysProcessManager{}
