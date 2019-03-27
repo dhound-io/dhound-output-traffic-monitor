@@ -31,23 +31,26 @@ service dhound-output-traffic-monitor status
 ```
 
 ### Options
+network events output: syslog, console, <path to a custom file>; default: console
 ```
     -log-file
 ```
-network events output: syslog, console, <path to a custom file>; default: console
 
+listen to a particular network interface; default: listen to all active network interfaces
 ```
     -eth
 ```
-listen to a particular network interface; default: listen to all active network interfaces
+
+log more detailed and debug information; default: false
 ```
     -verbose
 ```
-log more detailed and debug information; default: false
+
+Display dhound output traffic monitor version
 ```
     -version
 ```
-Display dhound output traffic monitor version
+
 
 ```
     -pprof
