@@ -144,14 +144,19 @@ func (monitor *NetworkMonitor) _monitorInterfaceTraffic(dev *NetInterfaceInfo) {
 	filterLines := make([]string, 0)
 
 	for _, address := range dev.Addresses {
-		// track all UDP traffic initiated by host
-		filterLines = append(filterLines, fmt.Sprintf("(udp && src host %s)", address))
+		if monitor.Options.Protocol == "all" || monitor.Options.Protocol == "tcp"{
+			// track TCP SYN that host tries to make to initiate connection
+			filterLines = append(filterLines, fmt.Sprintf("((tcp[tcpflags] == tcp-syn) && src %s)", address))
+			// track TCP SYN-ACK sent to host (TCP connection is opened)
+			filterLines = append(filterLines, fmt.Sprintf("(tcp[13] = 18 and dst host %s)", address))
+		}
+		if monitor.Options.Protocol == "all" || monitor.Options.Protocol == "udp"{
+			// track all UDP traffic initiated by host
+			filterLines = append(filterLines, fmt.Sprintf("(udp && src host %s)", address))
+		}
+
 		// track DNS traffic that comes on the host
 		filterLines = append(filterLines, fmt.Sprintf("(udp && port 53 && dst host %s)", address))
-		// track TCP SYN that host tries to make to initiate connection
-		filterLines = append(filterLines, fmt.Sprintf("((tcp[tcpflags] == tcp-syn) && src %s)", address))
-		// track TCP SYN-ACK sent to host (TCP connection is opened)
-		filterLines = append(filterLines, fmt.Sprintf("(tcp[13] = 18 and dst host %s)", address))
 	}
 
 	trafficFilter := strings.Join(filterLines, " || ")

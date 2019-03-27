@@ -24,7 +24,7 @@ func (program *Program) InternalRun() {
 
 	options := program.Options
 
-	emitLine(logLevel.important, "Dhound output traffic monitor %s started. Options: log-file='%s' eth='%s' verbose='%t'", Version, options.LogFile, options.NetworkInterface, options.Verbose)
+	emitLine(logLevel.important, "Dhound output traffic monitor %s started. Options: log-file='%s' eth='%s' verbose='%t' protocol='%s'", Version, options.LogFile, options.NetworkInterface, options.Verbose, options.Protocol)
 
 	if len(options.Pprof) > 0 {
 		go func() {
