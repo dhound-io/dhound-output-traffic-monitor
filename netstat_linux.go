@@ -10,6 +10,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const (
@@ -34,7 +35,7 @@ func (manager *NetStatManager) SyncPortList() {
 	minTime := currentTimeNumber - 60
 
 	for _, oldItem := range oldCache {
-		if item.EventTimeUtcNumber > currentTimeNumber {
+		if oldItem.EventTimeUtcNumber > minTime {
 			isFound := false
 			for _, newItem := range list {
 				if newItem.LocalIp == oldItem.LocalIp && newItem.LocalPort == oldItem.LocalPort {
@@ -111,7 +112,7 @@ func (manager *NetStatManager) FindPid(inode string, procFiles *[]string) int32 
 func (manager *NetStatManager) GetNetStatDataByprotocol(netstatFile string) []string {
 	data, err := ioutil.ReadFile(netstatFile)
 	if err != nil {
-		emitLine(logLevel.important, err)
+		emitLine(logLevel.important, "failed to get netstat info: %s", err)
 		return nil
 	}
 	lines := strings.Split(string(data), "\n")
