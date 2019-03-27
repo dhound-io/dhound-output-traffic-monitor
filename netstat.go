@@ -52,7 +52,7 @@ func (netstat *NetStatManager) FindNetstatInfoByLocalPort(localIp string, localP
 }
 
 func (manager *NetStatManager) SyncPortList() {
-	connections, err := net.Connections(manager.Options.Protocol)
+	connections, err := net.Connections("all")
 	if err != nil {
 		return
 	}
