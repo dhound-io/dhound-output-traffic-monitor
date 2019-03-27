@@ -17,6 +17,8 @@ func (output *Output) _processInput(lines []*OutputLine) {
 				//logwriter.Info()
 				log.SetOutput(logwriter)
 			}
+		} else if output.Options.LogFile == "console" {
+			
 		} else {
 			log.SetOutput(&lumberjack.Logger{
 				Filename:   output.Options.LogFile,

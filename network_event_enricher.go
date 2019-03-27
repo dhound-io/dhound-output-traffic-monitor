@@ -196,13 +196,10 @@ func (enricher *NetworkEventEnricher) _sync() {
 					protocol = "udp"
 				}
 
-				output := fmt.Sprintf("%s > %s:%v success:%v",
-					protocol, event.RemoteIpAddress,
-					event.RemotePort, event.Success)
-
-				if event.Size > 0 {
-					output += fmt.Sprintf(" bytes:%d", event.Size)
-				}
+				output := fmt.Sprintf("%s %s:%v > %s:%v success:%v",
+					protocol, event.LocalIpAddress, event.LocalPort,
+					event.RemoteIpAddress, event.RemotePort,
+					event.Success)
 
 				if event.ProcessId > -1 {
 					output += fmt.Sprintf(" pid:%d", event.ProcessId)
@@ -214,6 +211,10 @@ func (enricher *NetworkEventEnricher) _sync() {
 
 				if len(event.Domains) > 0 {
 					output += fmt.Sprintf(" domains:%s", strings.Join(event.Domains, ","))
+				}
+
+				if event.Size > 0 {
+					output += fmt.Sprintf(" bytes:%d", event.Size)
 				}
 
 				if  event.EventTimeUtcNumber > 0 {
