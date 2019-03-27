@@ -44,14 +44,11 @@ func (manager *NetStatManager) SyncPortList() {
 			}
 
 			if !isFound {
-				debug("old item cache: %v %v %v", oldItem.LocalIp, oldItem.LocalPort, oldItem.Pid)
 				list = append(list, oldItem)
 			}
 
 		}
 	}
-
-	debug("_cache:", len(list))
 
 	manager._cache = list
 }
