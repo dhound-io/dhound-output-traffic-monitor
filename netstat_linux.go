@@ -28,11 +28,37 @@ func (manager *NetStatManager) SyncPortList() {
 	list = manager.netstat(list, PROC_TCP6, procFiles)
 	list = manager.netstat(list, PROC_UDP6, procFiles)
 
+	oldCache := manager._cache
+	// keep info about pid only 60 seconds
+	currentTimeNumber := time.Now().UTC().Unix()
+	minTime := currentTimeNumber - 60
+
+	for _, oldItem := range oldCache {
+		if item.EventTimeUtcNumber > currentTimeNumber {
+			isFound := false
+			for _, newItem := range list {
+				if newItem.LocalIp == oldItem.LocalIp && newItem.LocalPort == oldItem.LocalPort {
+					isFound = true
+				}
+			}
+
+			if !isFound {
+				debug("old item cache: %v %v %v", oldItem.LocalIp, oldItem.LocalPort, oldItem.Pid)
+				list = append(list, oldItem)
+			}
+
+		}
+	}
+
+	debug("_cache:", len(list))
+
 	manager._cache = list
 }
 
 func (manager *NetStatManager) netstat(list []*NetStatInfo, netStatFile string, procFiles *[]string) []*NetStatInfo {
 	data := manager.GetNetStatDataByprotocol(netStatFile)
+
+	currentTimeNumber := time.Now().UTC().Unix()
 
 	for _, line := range data {
 		netStatInfo := &NetStatInfo{}
@@ -42,7 +68,8 @@ func (manager *NetStatManager) netstat(list []*NetStatInfo, netStatFile string, 
 		netStatInfo.LocalIp = manager.ConvertIp(ip_port[0])
 		netStatInfo.LocalPort = uint32(hexToDec(ip_port[1]))
 		netStatInfo.Pid = manager.FindPid(line_array[9], procFiles)
-		if(netStatInfo.Pid > 0 && netStatInfo.LocalPort > 0) {
+		netStatInfo.EventTimeUtcNumber = currentTimeNumber
+		if netStatInfo.Pid > 0 && netStatInfo.LocalPort > 0 {
 			list = append(list, netStatInfo)
 		}
 	}
@@ -50,7 +77,7 @@ func (manager *NetStatManager) netstat(list []*NetStatInfo, netStatFile string, 
 	return list
 }
 
-func (manager *NetStatManager) FindProcFiles() (*[]string) {
+func (manager *NetStatManager) FindProcFiles() *[]string {
 	matches, err := filepath.Glob("/proc/[0-9]*/fd/[0-9]*")
 	if err != nil {
 		emitLine(logLevel.important, "failed to GetMapInodeOnPid %s", err)
@@ -66,12 +93,12 @@ func (manager *NetStatManager) FindPid(inode string, procFiles *[]string) int32 
 	re := regexp.MustCompile(inode)
 	for _, file := range files {
 		path, err := os.Readlink(file)
-		if (err == nil) {
+		if err == nil {
 			out := re.FindString(path)
 			if len(out) != 0 {
 				pidStr := strings.Split(file, "/")[2]
 				pid, err := strconv.Atoi(pidStr)
-				if (err == nil) {
+				if err == nil {
 					return int32(pid)
 				}
 			}
@@ -81,20 +108,17 @@ func (manager *NetStatManager) FindPid(inode string, procFiles *[]string) int32 
 	return 0
 }
 
-
 func (manager *NetStatManager) GetNetStatDataByprotocol(netstatFile string) []string {
 	data, err := ioutil.ReadFile(netstatFile)
 	if err != nil {
-		//fmt.Println(err)
-		debugJson(err)
-		os.Exit(1)
+		emitLine(logLevel.important, err)
+		return nil
 	}
 	lines := strings.Split(string(data), "\n")
 
 	// Return lines without Header line and blank line on the end
 	return lines[1 : len(lines)-1]
 }
-
 
 func (manager *NetStatManager) ConvertIp(ip string) string {
 	// Convert the ipv4 to decimal. Have to rearrange the ip because the
