@@ -74,7 +74,8 @@ func (manager *NetStatManager) SyncPortList() {
 	}
 
 	for _, connection := range connections {
-		if connection.Laddr.Port > 0 && connection.Pid > 0 && connection.Laddr.IP != "127.0.0.1" && connection.Laddr.IP != "::1" {
+		// if connection.Laddr.Port > 0 && connection.Pid > 0 {
+		// && connection.Laddr.IP != "127.0.0.1" && connection.Laddr.IP != "::1" {
 			isFound := false
 			for _, stat := range list {
 				if stat.LocalIp == connection.Laddr.IP && stat.LocalPort == connection.Laddr.Port {
@@ -95,7 +96,7 @@ func (manager *NetStatManager) SyncPortList() {
 				list = append(list, stat)
 				debugJson(stat)
 			}
-		}
+		// }
 	}
 
 	manager._cache = list
