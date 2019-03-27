@@ -91,7 +91,7 @@ func (manager *NetStatManager) SyncPortList() {
 				}
 
 				list = append(list, stat)
-				// debugJson(stat)
+				debugJson(stat)
 			}
 		}
 	}
