@@ -53,8 +53,9 @@ func (netstat *NetStatManager) FindNetstatInfoByLocalPort(localIp string, localP
 }
 
 func (manager *NetStatManager) SyncPortList() {
-	connections, err := net.Connections("all")
+	connections, err := net.Connections(manager.Options.Protocol)
 	if err != nil {
+		emitLine(logLevel.verbose,"Unknown protocol:"+manager.Options.Protocol)
 		return
 	}
 
