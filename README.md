@@ -31,7 +31,7 @@ service dhound-output-traffic-monitor status
 ```
 
 ### Options
-Network events output: syslog, console, <path to a custom file>; default: console
+Network events output: syslog, console, path to a custom file (ex. /var/log/dhound/dhound-traffic.log); default: console
 ```
     -log-file
 ```
