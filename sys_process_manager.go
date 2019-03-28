@@ -24,7 +24,7 @@ func (manager *SysProcessManager) Run() {
 	go func() {
 		for {
 			manager._syncProcessInfoOnPids()
-			time.Sleep(10 * time.Second)
+			time.Sleep(2 * time.Second)
 		}
 	}()
 }
