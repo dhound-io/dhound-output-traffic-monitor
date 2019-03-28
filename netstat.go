@@ -9,7 +9,6 @@ type NetStatInfo struct {
 	Pid                int32
 	LocalIp            string
 	LocalPort          uint32
-	RemotePort 		   uint32
 	EventTimeUtcNumber int64
 }
 
@@ -75,8 +74,7 @@ func (manager *NetStatManager) SyncPortList() {
 	}
 
 	for _, connection := range connections {
-		// if connection.Laddr.Port > 0 && connection.Pid > 0 {
-		// && connection.Laddr.IP != "127.0.0.1" && connection.Laddr.IP != "::1" {
+		 if connection.Laddr.Port > 0 && connection.Pid > 0 && connection.Laddr.IP != "127.0.0.1" && connection.Laddr.IP != "::1" {
 			isFound := false
 			for _, stat := range list {
 				if stat.LocalIp == connection.Laddr.IP && stat.LocalPort == connection.Laddr.Port {
@@ -90,14 +88,13 @@ func (manager *NetStatManager) SyncPortList() {
 					Pid:                connection.Pid,
 					LocalIp:            connection.Laddr.IP,
 					LocalPort:          connection.Laddr.Port,
-					RemotePort:         connection.Raddr.Port,
 					EventTimeUtcNumber: currentTimeNumber,
 				}
 
 				list = append(list, stat)
-				debugJson(stat)
+				// debugJson(stat)
 			}
-		// }
+		}
 	}
 
 	manager._cache = list
