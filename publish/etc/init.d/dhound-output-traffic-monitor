@@ -71,6 +71,8 @@ stop() {
     else
       emit "$name stopped."
     fi
+  else
+    emit "Some problems."
   fi
 }
 
