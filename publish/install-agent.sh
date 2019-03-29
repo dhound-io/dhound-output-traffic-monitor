@@ -89,18 +89,20 @@ echo
         fi
 
         echo -e "${GREEN}Updating apt repository cache...${NC}"
-        $APT_CMD update -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/dhound.list -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0" 
-
+        $APT_CMD update -o Dir::Etc::sourcelist=/etc/apt/sources.list.d/dhound.list -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
+        echo -e "${GREEN}Updating apt repositories...${NC}"
+        apt update > /dev/null
         if [ $UPDATEAGENT -eq 0 ]; then
             echo -e "${GREEN}Installing dhound-output-traffic-monitor...${NC}"
             $APT_CMD install dhound-output-traffic-monitor > /dev/null
             echo -e "${GREEN}Installation finished${NC}"
         else
+            echo -e "${GREEN}Updating dhound-output-traffic-monitor...${NC}"
             $APT_CMD install --only-upgrade dhound-output-traffic-monitor
+            echo -e "${GREEN}Update finished${NC}"
         fi
 
     elif [ "$DISTRO" = "CentOS" ] || [ $DISTRO = "Amazon" ] || [ $DISTRO = "RHEL" ] || [ $DISTRO = "Oracle" ]; then
-
         if [ $UPDATEAGENT -eq 0 ]; then
             GPG_KEY_LOCATION=/etc/pki/rpm-gpg/RPM-GPG-KEY-DHound
 
@@ -303,8 +305,8 @@ fi
 
 while getopts ":h:u" opt; do
     case $opt in
-    u)
-        UPDATEAGENT=1
+        u)
+            UPDATEAGENT=1
         ;;
         h)
                 print_help
@@ -323,7 +325,7 @@ while getopts ":h:u" opt; do
 done
 
 echo -e "${GREEN}===DHound Output Traffic Monitor===${NC}"
-which /opt/dhound-output-traffic-monitor > /dev/null
+which /opt/dhound-output-traffic-monitor/bin/dhound-output-traffic-monitor > /dev/null
 if [ $? -eq 0 ]; then
     DHOUND_INSTALLED=1
 else
