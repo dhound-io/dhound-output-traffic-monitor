@@ -210,7 +210,8 @@ func (enricher *NetworkEventEnricher) _sync() {
 				}
 
 				if len(event.Domains) > 0 {
-					output += fmt.Sprintf(" domains:%s", strings.Join(event.Domains, ","))
+					uDomains := unique(event.Domains)
+					output += fmt.Sprintf(" domains:%s", strings.Join(uDomains, ","))
 				}
 
 				if event.Size > 0 {
@@ -258,4 +259,19 @@ func (enricher *NetworkEventEnricher) RemoveIndex(array []*ProcessNetworkEvent, 
 	array = array[:len(array)-1]       // Truncate slice.
 
 	return array
+}
+
+func unique(slice []string) []string {
+	// create a map with all the values as key
+	uniqMap := make(map[string]struct{})
+	for _, v := range slice {
+		uniqMap[v] = struct{}{}
+	}
+
+	// turn the map keys into a slice
+	uniqSlice := make([]string, 0, len(uniqMap))
+	for v := range uniqMap {
+		uniqSlice = append(uniqSlice, v)
+	}
+	return uniqSlice
 }
