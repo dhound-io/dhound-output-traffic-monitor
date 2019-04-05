@@ -1,7 +1,6 @@
 #!/bin/sh
 
 REPOFOLDER=/var/dhound.io/repository
-#REPOFOLDER=/home/local-user/pseudo-repo
 
 # open packages directory
 cd packages/
