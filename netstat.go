@@ -1,9 +1,5 @@
 package main
 
-import (
-	"time"
-)
-
 type NetStatInfo struct {
 	Pid                int32
 	LocalIp            string
@@ -20,31 +16,3 @@ func (netstat *NetStatManager) Init() {
 	netstat._cache = make([]*NetStatInfo, 0)
 }
 
-func (netstat *NetStatManager) Run() {
-	go func() {
-		for {
-			netstat.SyncPortList()
-			time.Sleep(500 * time.Millisecond)
-		}
-	}()
-}
-
-func (netstat *NetStatManager) FindNetstatInfoByLocalPort(localIp string, localPort uint32) *NetStatInfo {
-	cache := netstat._cache
-	if len(cache) > 0 {
-		// check by ip and port
-		for _, info := range cache {
-			if info.LocalIp == localIp && info.LocalPort == localPort {
-				return info
-			}
-		}
-
-		// check only by port
-		for _, info := range cache {
-			if info.LocalPort == localPort {
-				return info
-			}
-		}
-	}
-	return nil
-}

@@ -7,6 +7,15 @@ import (
 	"github.com/shirou/gopsutil/net"
 )
 
+func (netstat *NetStatManager) Run() {
+	go func() {
+		for {
+			netstat.SyncPortList()
+			time.Sleep(2000 * time.Millisecond)
+		}
+	}()
+}
+
 func (manager *NetStatManager) SyncPortList() {
 	connections, err := net.Connections("all")
 	if err != nil {
@@ -53,4 +62,24 @@ func (manager *NetStatManager) SyncPortList() {
 	}
 
 	manager._cache = list
+}
+
+func (netstat *NetStatManager) FindNetstatInfoByLocalPort(localIp string, localPort uint32) *NetStatInfo {
+	cache := netstat._cache
+	if len(cache) > 0 {
+		// check by ip and port
+		for _, info := range cache {
+			if info.LocalIp == localIp && info.LocalPort == localPort {
+				return info
+			}
+		}
+
+		// check only by port
+		for _, info := range cache {
+			if info.LocalPort == localPort {
+				return info
+			}
+		}
+	}
+	return nil
 }

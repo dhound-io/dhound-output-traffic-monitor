@@ -20,61 +20,96 @@ const (
 	PROC_UDP6 = "/proc/net/udp6"
 )
 
-func (manager *NetStatManager) SyncPortList() {
-	list := make([]*NetStatInfo, 0)
-	procFiles := manager.FindProcFiles()
-	if manager.Options.Protocol == "all" || manager.Options.Protocol == "tcp" {
-		list = manager.netstat(list, PROC_TCP, procFiles)
-		list = manager.netstat(list, PROC_TCP6, procFiles)
-	}
-	if manager.Options.Protocol == "all" || manager.Options.Protocol == "udp" {
-		list = manager.netstat(list, PROC_UDP, procFiles)
-		list = manager.netstat(list, PROC_UDP6, procFiles)
-	}
+func (netstat *NetStatManager) Run() {
+
+}
+
+func (manager *NetStatManager) FindNetstatInfoByLocalPort(localIp string, localPort uint32, protocol NetworkProtocol) *NetStatInfo {
+	// remove old elements in cache
 	oldCache := manager._cache
-	// keep info about pid only 60 seconds
+	var cache []*NetStatInfo
 	currentTimeNumber := time.Now().UTC().Unix()
 	minTime := currentTimeNumber - 60
 
 	for _, oldItem := range oldCache {
 		if oldItem.EventTimeUtcNumber > minTime {
-			isFound := false
-			for _, newItem := range list {
-				if newItem.LocalIp == oldItem.LocalIp && newItem.LocalPort == oldItem.LocalPort {
-					isFound = true
-				}
-			}
-
-			if !isFound {
-				list = append(list, oldItem)
-			}
-
+			cache = append(cache, oldItem)
 		}
 	}
 
-	manager._cache = list
+	manager._cache = cache
+
+	if len(cache) > 0 {
+		// check by ip and port
+		for _, info := range cache {
+			if info.LocalIp == localIp && info.LocalPort == localPort {
+				return info
+			}
+		}
+
+		// check only by port
+		for _, info := range cache {
+			if info.LocalPort == localPort {
+				return info
+			}
+		}
+	}
+
+
+	// find pid by local port
+	var inode string
+
+ 	if(protocol == TCP)	{
+		inode = manager.findInodeByLocalPort(PROC_TCP, localPort)
+
+		if len(inode) == 0 {
+			inode = manager.findInodeByLocalPort(PROC_TCP6, localPort)
+		}
+	} else if(protocol == UDP){
+		inode = manager.findInodeByLocalPort(PROC_UDP, localPort)
+		if len(inode) == 0 {
+			inode = manager.findInodeByLocalPort(PROC_UDP6, localPort)
+		}
+	}
+
+	if len(inode) > 0 {
+		procFiles := manager.FindProcFiles()
+		pid := manager.FindPid(inode, procFiles)
+
+		if pid > 0 {
+			netStat := &NetStatInfo{
+				EventTimeUtcNumber:time.Now().UTC().Unix(),
+				LocalPort: localPort,
+				Pid: pid,
+			}
+
+			manager._cache = append(manager._cache, netStat)
+
+			return netStat
+		}
+	}
+
+	return nil
 }
 
-func (manager *NetStatManager) netstat(list []*NetStatInfo, netStatFile string, procFiles *[]string) []*NetStatInfo {
+
+func (manager *NetStatManager) findInodeByLocalPort(netStatFile string, localPort uint32) string {
 	data := manager.GetNetStatDataByprotocol(netStatFile)
 
-	currentTimeNumber := time.Now().UTC().Unix()
-
 	for _, line := range data {
-		netStatInfo := &NetStatInfo{}
 		// local ip and port
 		line_array := removeEmpty(strings.Split(strings.TrimSpace(line), " "))
 		ip_port := strings.Split(line_array[1], ":")
-		netStatInfo.LocalIp = manager.ConvertIp(ip_port[0])
-		netStatInfo.LocalPort = uint32(hexToDec(ip_port[1]))
-		netStatInfo.Pid = manager.FindPid(line_array[9], procFiles)
-		netStatInfo.EventTimeUtcNumber = currentTimeNumber
-		if netStatInfo.Pid > 0 && netStatInfo.LocalPort > 0 {
-			list = append(list, netStatInfo)
+
+		foundPort := uint32(hexToDec(ip_port[1]))
+
+		if(foundPort == localPort) {
+			inode := line_array[9]
+			return inode
 		}
 	}
 
-	return list
+	return ""
 }
 
 func (manager *NetStatManager) FindProcFiles() *[]string {

@@ -51,7 +51,7 @@ func (enricher *NetworkEventEnricher) Init() {
 func (enricher *NetworkEventEnricher) Run() {
 	go func() {
 		for {
-			time.Sleep(2 * time.Second)
+			time.Sleep(1000 * time.Millisecond)
 			enricher._sync()
 		}
 	}()
@@ -163,7 +163,7 @@ func (enricher *NetworkEventEnricher) _sync() {
 
 			// try to find info about process
 			if networkEvent.ProcessId < 0 {
-				netStatInfo := enricher.NetStat.FindNetstatInfoByLocalPort(networkEvent.LocalIpAddress, networkEvent.LocalPort)
+				netStatInfo := enricher.NetStat.FindNetstatInfoByLocalPort(networkEvent.LocalIpAddress, networkEvent.LocalPort, networkEvent.Protocol)
 				if netStatInfo != nil {
 					networkEvent.ProcessId = netStatInfo.Pid
 				}
