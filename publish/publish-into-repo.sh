@@ -1,6 +1,6 @@
 #!/bin/sh
 
-REPOFOLDER=/var/dhound.io/repository
+REPOFOLDER=/var/dhound.io/repository-dotm
 
 # open packages directory
 cd packages/

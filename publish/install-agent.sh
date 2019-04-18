@@ -37,9 +37,9 @@ Fedora_VERSION_MIN="21"
 Amazon_VERSION_MIN=""
 
 APIHOST="https://gate.dhound.io"
-DEBREPOSITORY="https://repository.dhound.io/deb"
-RPMREPOSITORY="https://repository.dhound.io/rpm"
-SIGNKEY="https://repository.dhound.io/dhound-agent-packaging-public.key"
+DEBREPOSITORY="https://repository1.dhound.io/deb"
+RPMREPOSITORY="https://repository1.dhound.io/rpm"
+SIGNKEY="https://repository1.dhound.io/dhound-agent-packaging-public.key"
 
 TARGET_DIR="/etc/dhound-output-traffic-monitor"
 
@@ -118,9 +118,9 @@ gpgcheck=1
 metadata_expire=300
 gpgkey=file://$GPG_KEY_LOCATION
 
-[repository.dhound.io]
+[repository1.dhound.io]
 name=dhound-output-traffic-monitor
-baseurl=https://repository.dhound.io/rpm
+baseurl=https://repository1.dhound.io/rpm
 failovermethod=priority
 enabled=1
 gpgcheck=1
