@@ -1,4 +1,4 @@
-VERSION=1.1.38
+VERSION=1.1.39
 PACKAGE_NAME=dhound-output-traffic-monitor
 
 .PHONY: default
@@ -10,8 +10,8 @@ PROJECT=dhound-output-traffic-monitor
 compile: $(PROJECT)
 
 dhound-output-traffic-monitor:
-    go build --ldflags '-extldflags "-static"' -o $(PACKAGE_NAME)
 	#go build --ldflags '-extldflags "-static"' -o $@
+	go build --ldflags '-extldflags "-static"' -o $(PACKAGE_NAME)
 
 .PHONY: clean
 clean:
