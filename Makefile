@@ -1,4 +1,4 @@
-VERSION=1.1.40
+VERSION=1.1.41
 PACKAGE_NAME=dhound-output-traffic-monitor
 
 .PHONY: default
@@ -10,20 +10,16 @@ PROJECT=dhound-output-traffic-monitor
 compile: $(PROJECT)
 
 dhound-output-traffic-monitor:
-	#go build --ldflags '-extldflags "-static"' -o $@
 	go build --ldflags '-extldflags "-static"' -o $(PACKAGE_NAME)
 
 .PHONY: clean
 clean:
-	#-rm $(PROJECT)
 	-rm -rf build
 	-rm -rf publish/empty
-	#-rm -rf publish/packages
 
 .PHONY: buildempty
 buildempty:
 	-mkdir publish/empty
-	#-mkdir publish/packages
 
 
 .PHONY: rpm deb
