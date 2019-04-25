@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -124,6 +125,7 @@ func (manager *NetStatManager) FindProcFiles() *[]string {
 
 func (manager *NetStatManager) FindPid(inode string, procFiles *[]string) int32 {
 	files := *procFiles
+	foundPids := make([]int32, 0)
 
 	re := regexp.MustCompile(inode)
 	for _, file := range files {
@@ -134,10 +136,15 @@ func (manager *NetStatManager) FindPid(inode string, procFiles *[]string) int32 
 				pidStr := strings.Split(file, "/")[2]
 				pid, err := strconv.Atoi(pidStr)
 				if err == nil {
-					return int32(pid)
+					foundPids = append(foundPids, int32(pid))
 				}
 			}
 		}
+	}
+
+	if len(foundPids) > 0 {
+		sort.Slice(foundPids, func(i, j int) bool { return foundPids[i] < foundPids[j] })
+		return foundPids[len(foundPids)-1]
 	}
 
 	return 0
