@@ -37,6 +37,7 @@ Fedora_VERSION_MIN="21"
 Amazon_VERSION_MIN=""
 
 APIHOST="https://gate.dhound.io"
+AGENT_DEBREPOSITORY="https://repository.dhound.io/deb"
 DEBREPOSITORY="https://repository1.dhound.io/deb"
 RPMREPOSITORY="https://repository1.dhound.io/rpm"
 SIGNKEY="https://repository1.dhound.io/dhound-agent-packaging-public.key"
@@ -80,7 +81,7 @@ echo
 
         echo -e "${GREEN}Adding repository $DEBREPOSITORY ${NC}"
         #sh -c "echo \"deb $DEBREPOSITORY dhound.io main\" | sudo tee /etc/apt/sources.list.d/dhound.list"
-         echo -e "deb $DEBREPOSITORY dhound-agent main\ndeb $DEBREPOSITORY dhound-output-traffic-monitor main" | sudo tee /etc/apt/sources.list.d/dhound.list
+         echo -e "deb $AGENT_DEBREPOSITORY dhound-agent main\ndeb $DEBREPOSITORY dhound-output-traffic-monitor main" | sudo tee /etc/apt/sources.list.d/dhound.list
 
         $CURL -Ls $SIGNKEY | sudo apt-key add - > /dev/null
         if [ $? -gt 0 ]; then
