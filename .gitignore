@@ -8,6 +8,8 @@ _ignore.go
 .scrutinizer.yml
 .travis.yml
 
+dhound-output-traffic-monitor
+
 # Test binary, build with `go test -c`
 *.test
 
