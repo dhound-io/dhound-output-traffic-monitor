@@ -12,6 +12,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/shirou/gopsutil/net"
 )
 
 const (
@@ -23,6 +25,7 @@ const (
 
 func (netstat *NetStatManager) Run() {
 
+	net.ConnectionsPid()
 }
 
 func (manager *NetStatManager) FindNetstatInfoByLocalPort(localIp string, localPort uint32, protocol NetworkProtocol) *NetStatInfo {
@@ -56,17 +59,16 @@ func (manager *NetStatManager) FindNetstatInfoByLocalPort(localIp string, localP
 		}
 	}
 
-
 	// find pid by local port
 	var inode string
 
- 	if(protocol == TCP)	{
+	if protocol == TCP {
 		inode = manager.findInodeByLocalPort(PROC_TCP, localPort)
 
 		if len(inode) == 0 {
 			inode = manager.findInodeByLocalPort(PROC_TCP6, localPort)
 		}
-	} else if(protocol == UDP){
+	} else if protocol == UDP {
 		inode = manager.findInodeByLocalPort(PROC_UDP, localPort)
 		if len(inode) == 0 {
 			inode = manager.findInodeByLocalPort(PROC_UDP6, localPort)
@@ -79,9 +81,9 @@ func (manager *NetStatManager) FindNetstatInfoByLocalPort(localIp string, localP
 
 		if pid > 0 {
 			netStat := &NetStatInfo{
-				EventTimeUtcNumber:time.Now().UTC().Unix(),
-				LocalPort: localPort,
-				Pid: pid,
+				EventTimeUtcNumber: time.Now().UTC().Unix(),
+				LocalPort:          localPort,
+				Pid:                pid,
 			}
 
 			manager._cache = append(manager._cache, netStat)
@@ -93,7 +95,6 @@ func (manager *NetStatManager) FindNetstatInfoByLocalPort(localIp string, localP
 	return nil
 }
 
-
 func (manager *NetStatManager) findInodeByLocalPort(netStatFile string, localPort uint32) string {
 	data := manager.GetNetStatDataByprotocol(netStatFile)
 
@@ -104,7 +105,7 @@ func (manager *NetStatManager) findInodeByLocalPort(netStatFile string, localPor
 
 		foundPort := uint32(hexToDec(ip_port[1]))
 
-		if(foundPort == localPort) {
+		if foundPort == localPort {
 			inode := line_array[9]
 			return inode
 		}
