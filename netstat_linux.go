@@ -12,8 +12,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/shirou/gopsutil/net"
 )
 
 const (
@@ -24,8 +22,6 @@ const (
 )
 
 func (netstat *NetStatManager) Run() {
-
-	net.ConnectionsPid()
 }
 
 func (manager *NetStatManager) FindNetstatInfoByLocalPort(localIp string, localPort uint32, protocol NetworkProtocol) *NetStatInfo {
