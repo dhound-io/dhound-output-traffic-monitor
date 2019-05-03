@@ -26,8 +26,8 @@ func (netstat *NetStatManager) Run() {
 
 }
 
-func (manager *NetStatManager) SyncPortList() {
-	connections, err := net.Connections("all")
+func (manager *NetStatManager) SyncPortList(protocol string) {
+	connections, err := net.Connections(protocol)
 	if err != nil {
 		return
 	}
@@ -74,11 +74,25 @@ func (manager *NetStatManager) SyncPortList() {
 	manager._cache = list
 }
 
-func (netstat *NetStatManager) FindNetstatInfoByLocalPort(localIp string, localPort uint32) *NetStatInfo {
-	result := InternalFindNetstatInfoByLocalPort(localIp, localPort)
+func (netstat *NetStatManager) FindNetstatInfoByLocalPort(localIp string, localPort uint32, protocol NetworkProtocol) *NetStatInfo {
+	var string prot
+	isIpV6 := IsIPv6(localIp)
+
+	if protocol == TCP && !isIpV6 {
+		prot = "tcp4"
+
+	} else if protocol == TCP && isIpV6 {
+		prot = "tcp6"
+	} else if protocol == UDP && !isIpV6 {
+		prot = "udp4"
+	} else if protocol == UDP && isIpV6 {
+		prot = "udp6"
+	}
+
+	result := netstat.InternalFindNetstatInfoByLocalPort(localIp, localPort)
 	if result == nil {
-		netstat.SyncPortList()
-		result := InternalFindNetstatInfoByLocalPort(localIp, localPort)
+		netstat.SyncPortList(prot)
+		result := netstat.InternalFindNetstatInfoByLocalPort(localIp, localPort)
 	}
 
 	return result
