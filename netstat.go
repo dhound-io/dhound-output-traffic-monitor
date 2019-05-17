@@ -75,12 +75,11 @@ func (manager *NetStatManager) SyncPortList(protocol string) {
 }
 
 func (netstat *NetStatManager) FindNetstatInfoByLocalPort(localIp string, localPort uint32, protocol NetworkProtocol) *NetStatInfo {
-	var string prot
+	var prot string
 	isIpV6 := IsIPv6(localIp)
 
 	if protocol == TCP && !isIpV6 {
 		prot = "tcp4"
-
 	} else if protocol == TCP && isIpV6 {
 		prot = "tcp6"
 	} else if protocol == UDP && !isIpV6 {
@@ -92,7 +91,7 @@ func (netstat *NetStatManager) FindNetstatInfoByLocalPort(localIp string, localP
 	result := netstat.InternalFindNetstatInfoByLocalPort(localIp, localPort)
 	if result == nil {
 		netstat.SyncPortList(prot)
-		result := netstat.InternalFindNetstatInfoByLocalPort(localIp, localPort)
+		result = netstat.InternalFindNetstatInfoByLocalPort(localIp, localPort)
 	}
 
 	return result
