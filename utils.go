@@ -38,13 +38,13 @@ func Itoa(i int) (s string) {
 
 func removeEmpty(array []string) []string {
 	// remove empty data from line
-	var new_array []string
+	var newArray []string
 	for _, i := range array {
 		if i != "" {
-			new_array = append(new_array, i)
+			newArray = append(newArray, i)
 		}
 	}
-	return new_array
+	return newArray
 }
 
 func hexToDec(h string) int64 {

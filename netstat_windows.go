@@ -4,7 +4,6 @@ package main
 
 import (
 	"time"
-
 	"github.com/shirou/gopsutil/net"
 )
 
