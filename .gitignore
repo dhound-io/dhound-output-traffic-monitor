@@ -22,8 +22,6 @@ read_me\.agent\.txt
 
 \.idea/
 
-publish/docker/
-
 *.rpm
 
 how-to-publish

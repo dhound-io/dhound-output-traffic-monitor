@@ -8,5 +8,6 @@ env CC=gcc GOOS=linux GOARCH=386 CGO_ENABLED=1 GOGCCFLAGS="-fPIC -m32 -fmessage-
 env CC=gcc GOOS=linux GOARCH=amd64 CGO_ENABLED=1 GOGCCFLAGS="-fPIC -m64 -fmessage-length=0" ARCHITECTURE=amd64  make deb
 env CC=gcc GOOS=linux GOARCH=amd64 CGO_ENABLED=1 GOGCCFLAGS="-fPIC -m64 -fmessage-length=0" ARCHITECTURE=ia64 make deb
 
+mkdir publish/packages
 mv *.deb publish/packages
 rm dhound-output-traffic-monitor
