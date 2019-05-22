@@ -16,7 +16,7 @@ export PATH
 name=dhound-output-traffic-monitor
 logdir=/var/log/dhound/
 program=/opt/dhound-output-traffic-monitor/bin/dhound-output-traffic-monitor
-args=-log-file\ ${logdir}dhound-output-traffic-monitor.log\ -protocol\ tcp
+args=-log-file=${logdir}dhound-output-traffic-monitor.log\ -protocol=tcp
 #args=-log-file\ syslog
 pidfile="/var/run/$name.pid"
 

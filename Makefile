@@ -1,4 +1,4 @@
-VERSION=1.2.5
+VERSION=1.2.7
 PACKAGE_NAME=dhound-output-traffic-monitor
 
 .PHONY: default
