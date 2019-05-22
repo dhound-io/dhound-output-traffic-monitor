@@ -1,17 +1,17 @@
 package main
 
 import (
+	process "github.com/shirou/gopsutil/process"
 	//"fmt"
 	"time"
-	process "github.com/shirou/gopsutil/process"
 )
 
 var (
-	hits = 0
-	misses = 0
-	isOutdated bool = false
-	notFound = false
-	isNew = false
+	hits       = 0
+	misses     = 0
+	isOutdated = false
+	notFound   = false
+	isNew      = false
 )
 type Counter struct {
 	hits, misses int32
@@ -103,7 +103,7 @@ func (manager SysProcessManager) FindProcessInfoByPid(pid int32) *ProcessInfo {
 		if processInfo, ok := manager._pidToProcessInfoMap[pid]; ok {
 			if processInfo.EventTimeUtcNumber > 0{
 				diff := currentTime - processInfo.EventTimeUtcNumber
-				if (diff > 60){
+				if diff > 60 {
 					isOutdated  = true
 					delete(manager._pidToProcessInfoMap, pid)
 				}else{
